@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class IsDonePlansPage extends StatelessWidget {
-  const IsDonePlansPage({super.key});
+  final int plansLength;
+  final int donePlansLength;
+  const IsDonePlansPage(this.plansLength, this.donePlansLength, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,13 +15,13 @@ class IsDonePlansPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "03",
+                "$plansLength",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                 ),
               ),
               Text(
-                "00",
+                "$donePlansLength",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                 ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app2/plans_model_pages/model_screen_page.dart';
 import 'package:todo_app2/plans_model_pages/plans_model.dart';
 import 'package:todo_app2/widget_pages/plans_List.dart';
 
@@ -15,6 +16,13 @@ class ToDoScreen extends StatefulWidget {
 class _ToDoScreenState extends State<ToDoScreen> {
   Plans plans = Plans();
   DateTime dateTime = DateTime.now();
+
+  void addPlansToList(String planName, DateTime dateTime10) {
+    setState(() {
+      print("time:   ${dateTime10.day}");
+      plans.addPlans(planName, dateTime10);
+    });
+  }
 
   void chooseDateTime(BuildContext context) {
     showDatePicker(
@@ -45,7 +53,8 @@ class _ToDoScreenState extends State<ToDoScreen> {
 
   void isDonePlan(String id) {
     setState(() {
-      plans.plansList
+      plans
+          .getListByTime(dateTime)
           .firstWhere((element) => element.id == id)
           .isDoneFunction();
     });
@@ -57,8 +66,31 @@ class _ToDoScreenState extends State<ToDoScreen> {
     });
   }
 
+  int plansLength() {
+    return plans.getListByTime(dateTime).length;
+  }
+
+  int donePlansLength() {
+    return plans
+        .getListByTime(dateTime)
+        .where((element) => element.isDone)
+        .toList()
+        .length;
+  }
+
+  void modalScreen(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        isDismissible: false,
+        builder: (cxt) {
+          return ModelScreenPage(addPlansToList);
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
+    print("hel:     ${dateTime.day}");
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -84,15 +116,17 @@ class _ToDoScreenState extends State<ToDoScreen> {
           SizedBox(
             height: 60,
           ),
-          IsDonePlansPage(),
+          IsDonePlansPage(plansLength(), donePlansLength()),
           SizedBox(
             height: 40,
           ),
-          PlansList(plans.plansList, isDonePlan, deletePlan),
+          PlansList(plans.getListByTime(dateTime), isDonePlan, deletePlan),
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          modalScreen(context);
+        },
         child: Icon(
           Icons.add,
         ),

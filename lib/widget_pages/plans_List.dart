@@ -11,17 +11,36 @@ class PlansList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: ListView.builder(
-        itemBuilder: (context, index) {
-          return PlanListTile(
-            list[index],
-            isDoneFunction,
-            deletePlan,
+    return list.length > 0
+        ? Expanded(
+            child: ListView.builder(
+              itemBuilder: (context, index) {
+                return PlanListTile(
+                  list[index],
+                  isDoneFunction,
+                  deletePlan,
+                );
+              },
+              itemCount: list.length,
+            ),
+          )
+        : Column(
+            children: [
+              Text(
+                "Hozircha rejalar yo'q!",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Image.asset(
+                "assets/sleep.png",
+                height: 220,
+              ),
+            ],
           );
-        },
-        itemCount: list.length,
-      ),
-    );
   }
 }
