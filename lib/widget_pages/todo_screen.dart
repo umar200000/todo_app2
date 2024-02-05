@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app2/plans_model_pages/hive_repo.dart';
 import 'package:todo_app2/plans_model_pages/model_screen_page.dart';
 import 'package:todo_app2/plans_model_pages/plans_model.dart';
 import 'package:todo_app2/widget_pages/plans_List.dart';
@@ -16,10 +17,10 @@ class ToDoScreen extends StatefulWidget {
 class _ToDoScreenState extends State<ToDoScreen> {
   Plans plans = Plans();
   DateTime dateTime = DateTime.now();
+  HiveRepo hiveRepo = HiveRepo();
 
   void addPlansToList(String planName, DateTime dateTime10) {
     setState(() {
-      print("time:   ${dateTime10.day}");
       plans.addPlans(planName, dateTime10);
     });
   }
@@ -57,12 +58,14 @@ class _ToDoScreenState extends State<ToDoScreen> {
           .getListByTime(dateTime)
           .firstWhere((element) => element.id == id)
           .isDoneFunction();
+      hiveRepo.savePlansList(plans.plansList);
     });
   }
 
   void deletePlan(String id) {
     setState(() {
       plans.plansList.removeWhere((element) => element.id == id);
+      hiveRepo.savePlansList(plans.plansList);
     });
   }
 
